@@ -19,9 +19,11 @@ jobs:
           java-version: '17' 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.22.3'
+          flutter-version: '3.19.0'
       - uses: actions/checkout@v2
       - run: flutter pub get
+      - run: |
+
 
       - name: Decode Keystore
         run: |
@@ -35,29 +37,22 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-      - name: Verify APK signature (apksigner)
-        run: |
-          $ANDROID_HOME/build-tools/33.0.0/apksigner verify --verbose build/app/outputs/flutter-apk/app-release.apk
       - name: Verify APK signature (jarsigner)
         run: |
           jarsigner -verify -verbose -certs build/app/outputs/flutter-apk/app-release.apk
-
-      - name: APK Info
-        run: |
-          $ANDROID_HOME/build-tools/33.0.0/aapt dump badging build/app/outputs/flutter-apk/app-release.apk
       - name: List APK Directory
         run: ls -alh ${{ github.workspace }}/build/app/outputs/flutter-apk
       - name: Upload APK
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: apk
           path: ${{ github.workspace }}/build/app/outputs/flutter-apk/app-release.apk
 
-  
+
 
   upload-release:
     permissions: write-all
-    needs: [build_android]
+    needs: [build_android,]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -70,19 +65,22 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Download APK
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: apk
-          path: ./out/
+          path: ./out/android
 
-  
+
+      - name: List output directory
+        run: ls -R ./out
 
       - name: Upload Release
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         with:
-          files: ./out/*
+          files: |
+            ./out/android/*
           tag_name: ${{ steps.version.outputs.VERSION }}
           draft: false
           prerelease: false
