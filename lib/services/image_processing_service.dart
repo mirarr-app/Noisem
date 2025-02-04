@@ -7,6 +7,8 @@ import 'package:image/image.dart' as img;
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:posthog_flutter/posthog_flutter.dart';
+import 'package:enough_ascii_art/enough_ascii_art.dart' as art;
+import 'package:flutter/services.dart';
 
 class ImageProcessingService {
   static Future<void> processImage({
@@ -191,6 +193,28 @@ class ImageProcessingService {
       return {};
     } catch (e) {
       return {};
+    }
+  }
+
+  static Future<void> convertToAsciiArt(String imagePath,
+      {bool compact = false}) async {
+    try {
+      final bytes = await File(imagePath).readAsBytes();
+      final image = img.decodeImage(bytes);
+
+      if (image == null) {
+        throw Exception('Failed to decode image');
+      }
+
+      // Use smaller width for compact version
+      final maxWidth = compact ? 40 : 100;
+      final asciiArt =
+          art.convertImage(image, maxWidth: maxWidth, invert: false);
+
+      // Copy to clipboard
+      await Clipboard.setData(ClipboardData(text: asciiArt));
+    } catch (e) {
+      throw Exception('Failed to convert to ASCII art: $e');
     }
   }
 }

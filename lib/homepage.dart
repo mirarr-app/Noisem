@@ -228,6 +228,77 @@ class _HomepageState extends State<Homepage>
     }
   }
 
+  Future<void> _convertToAscii() async {
+    if (processedImagePath == null) return;
+
+    try {
+      setState(() {
+        isProcessing = true;
+      });
+
+      await ImageProcessingService.convertToAsciiArt(processedImagePath!);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('ASCII art copied to clipboard!'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+
+      await Posthog().capture(
+        eventName: 'ascii_art_generated',
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to convert to ASCII art: $e')),
+        );
+      }
+    } finally {
+      setState(() {
+        isProcessing = false;
+      });
+    }
+  }
+
+  Future<void> _convertToCompactAscii() async {
+    if (processedImagePath == null) return;
+
+    try {
+      setState(() {
+        isProcessing = true;
+      });
+
+      await ImageProcessingService.convertToAsciiArt(processedImagePath!,
+          compact: true);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Compact ASCII art copied to clipboard!'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+
+      await Posthog().capture(
+        eventName: 'compact_ascii_art_generated',
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to convert to ASCII art: $e')),
+        );
+      }
+    } finally {
+      setState(() {
+        isProcessing = false;
+      });
+    }
+  }
+
   List<Map<String, dynamic>> _getFilteredLuts(String category) {
     return luts
         .where((lut) =>
@@ -341,14 +412,30 @@ class _HomepageState extends State<Homepage>
         actions: [
           if (processedImagePath != null)
             Padding(
-              padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+              padding: const EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
+              child: NesIconButton(
+                icon: NesIcons.copy,
+                onPress: _convertToAscii,
+              ),
+            ),
+          if (processedImagePath != null)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
+              child: NesIconButton(
+                icon: NesIcons.textFile,
+                onPress: _convertToCompactAscii,
+              ),
+            ),
+          if (processedImagePath != null)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
               child: NesIconButton(
                 icon: NesIcons.saveFile,
                 onPress: _saveImage,
               ),
             ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+            padding: const EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
             child: NesIconButton(
               icon: NesIcons.add,
               onPress: pickImage,
