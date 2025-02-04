@@ -4,7 +4,7 @@
     <img src="https://github.com/user-attachments/assets/3d66ec37-a6f7-442e-bc48-1d49b3b5f800" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">Best-README-Template</h3>
+  <h3 align="center">Noisem</h3>
 
   <p align="center">
     An android app to edit your images Retro Style!
