@@ -209,7 +209,7 @@ class ImageProcessingService {
       // Use smaller width for compact version
       final maxWidth = compact ? 40 : 100;
       final asciiArt =
-          art.convertImage(image, maxWidth: maxWidth, invert: false);
+          art.convertImage(image, maxWidth: maxWidth, invert: true);
 
       // Copy to clipboard
       await Clipboard.setData(ClipboardData(text: asciiArt));
