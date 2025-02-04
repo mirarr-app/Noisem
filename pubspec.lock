@@ -65,6 +65,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.6"
+  enough_ascii_art:
+    dependency: "direct main"
+    description:
+      name: enough_ascii_art
+      sha256: "797ab2a43796d97f125e1f8a4561fda96e66ea49804f5df59b0dde018cffee10"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   equatable:
     dependency: transitive
     description:
