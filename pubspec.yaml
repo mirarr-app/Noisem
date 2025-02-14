@@ -1,10 +1,12 @@
 name: Noisem
 description: "An android app to edit images retro style"
 publish_to: 'none'
-version: 1.2.0
+version: 1.2.0+1
 
 environment:
   sdk: '>=3.4.3 <4.0.0'
+  flutter: "3.22.0"
+
 
 dependencies:
   flutter:
