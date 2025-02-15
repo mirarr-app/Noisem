@@ -1,12 +1,11 @@
 name: Noisem
 description: "An android app to edit images retro style"
-publish_to: 'none'
-version: 1.2.0+1
+publish_to: "none"
+version: 1.2.1+1
 
 environment:
-  sdk: '>=3.4.3 <4.0.0'
+  sdk: ">=3.4.3 <4.0.0"
   flutter: "3.22.2"
-
 
 dependencies:
   flutter:
@@ -38,7 +37,6 @@ flutter:
     - assets/cubes/ilford/
     - assets/cubes/others/
   fonts:
-      - family: PressStart2P
-        fonts:
-          - asset: "assets/PressStart2P-Regular.ttf"
-      
+    - family: PressStart2P
+      fonts:
+        - asset: "assets/PressStart2P-Regular.ttf"
